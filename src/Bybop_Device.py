@@ -430,6 +430,23 @@ class BebopDrone(Device):
         An emergency request shuts down the motors.
         """
         self.send_data('ardrone3.Piloting.Emergency')
+    def roll(self,roll_value):
+        """
+        Have the drone move left or right depending on the roll_value. 
+        Refer to here for more information: https://github.com/Parrot-Developers/arsdk-xml/blob/e73425074471c58561d04c85da4a6400b638779d/xml/ardrone3.xml#L66
+        NOTE: No acknowledgement is returned.
+        """
+        if((roll_value >100) or (roll_value < -100)):
+            print("Drone Roll value must be between -100 and 100")
+            return
+        self.send_data('ardrone3.Piloting.PCMD',(0,roll_value,0,0,0,0))
+    def retHome(self):
+        """
+        Send a return hoome command to the drone
+        https://github.com/Parrot-Developers/arsdk-xml/blob/e73425074471c58561d04c85da4a6400b638779d/xml/ardrone3.xml#L143
+        Sending 1 will send it home
+        """
+        self.send_data('ardrone3.Piloting.NavigateHome',1)
 
 class JumpingSumo(Device):
     def __init__(self, ip, c2d_port, d2c_port):
